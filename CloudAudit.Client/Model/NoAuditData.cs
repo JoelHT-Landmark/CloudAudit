@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CloudAudit.Client
+namespace CloudAudit.Client.Model
 {
-    public class Class1
+    public sealed class NoAuditData
     {
     }
 }
