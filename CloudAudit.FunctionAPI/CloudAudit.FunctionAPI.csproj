@@ -6,6 +6,10 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.6" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CloudAudit.Client\CloudAudit.Client.csproj" />
+    <ProjectReference Include="..\CloudAudit\CloudAudit.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>

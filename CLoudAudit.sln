@@ -5,6 +5,22 @@ VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudAudit.FunctionAPI", "CloudAudit.FunctionAPI\CloudAudit.FunctionAPI.csproj", "{624F47EA-E84B-4EF2-BCBF-6DD744DFA6FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudAudit.Client", "CloudAudit.Client\CloudAudit.Client.csproj", "{C0B2DAC7-27C8-41E0-849D-43A3905086ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudAudit", "CloudAudit\CloudAudit.csproj", "{8C5880E3-F5E7-4F5A-8DDE-E4342140D313}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0D39152E-6A39-4936-8CC5-0413BFC253D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudAudit.Tests", "CloudAudit.Tests\CloudAudit.Tests.csproj", "{F320EB05-DEEB-4CFB-B94C-BD3F0F61FB97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudAudit.Client.Tests", "CloudAudit.Client.Tests\CloudAudit.Client.Tests.csproj", "{DD029A93-230E-4F92-821F-3C353A029891}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BB0AE3DE-5459-4E37-BCD8-B707CDD17EBB}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +31,29 @@ Global
 		{624F47EA-E84B-4EF2-BCBF-6DD744DFA6FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{624F47EA-E84B-4EF2-BCBF-6DD744DFA6FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{624F47EA-E84B-4EF2-BCBF-6DD744DFA6FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0B2DAC7-27C8-41E0-849D-43A3905086ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0B2DAC7-27C8-41E0-849D-43A3905086ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0B2DAC7-27C8-41E0-849D-43A3905086ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0B2DAC7-27C8-41E0-849D-43A3905086ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C5880E3-F5E7-4F5A-8DDE-E4342140D313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C5880E3-F5E7-4F5A-8DDE-E4342140D313}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C5880E3-F5E7-4F5A-8DDE-E4342140D313}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C5880E3-F5E7-4F5A-8DDE-E4342140D313}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F320EB05-DEEB-4CFB-B94C-BD3F0F61FB97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F320EB05-DEEB-4CFB-B94C-BD3F0F61FB97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F320EB05-DEEB-4CFB-B94C-BD3F0F61FB97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F320EB05-DEEB-4CFB-B94C-BD3F0F61FB97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD029A93-230E-4F92-821F-3C353A029891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD029A93-230E-4F92-821F-3C353A029891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD029A93-230E-4F92-821F-3C353A029891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD029A93-230E-4F92-821F-3C353A029891}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F320EB05-DEEB-4CFB-B94C-BD3F0F61FB97} = {0D39152E-6A39-4936-8CC5-0413BFC253D3}
+		{DD029A93-230E-4F92-821F-3C353A029891} = {0D39152E-6A39-4936-8CC5-0413BFC253D3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A1290B71-85EA-4B72-AAE9-E869457DB45E}
