@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace CloudAudit.Client.Tests.Mocks
+﻿namespace CloudAudit.Client.Tests.Mocks
 {
+    using System;
+
     public class MockEmailNotification
     {
         public long Id { get; internal set; } = GetRandomEmailNotificationId();

@@ -1,12 +1,45 @@
-﻿using LiteGuard;
-using System;
-using System.Diagnostics.Contracts;
-using System.Linq.Expressions;
-
-namespace CloudAudit.Client.Extensions
+﻿namespace CloudAudit.Client.Extensions
 {
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Linq.Expressions;
+    using System.Net.Http;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    using LiteGuard;
+
+    using Newtonsoft.Json;
+
     public static class HelperExtensions
     {
+        /// <summary>
+        /// Posts an object to the specified <paramref name="requestUrl"/> as serialized JSON
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="client"></param>
+        /// <param name="requestUrl"></param>
+        /// <param name="dataPayload"></param>
+        /// <returns></returns>
+        public static async Task PostAsJsonAsync<T>(this HttpClient client, string requestUrl, T dataPayload)
+        {
+            var json = JsonConvert.SerializeObject(dataPayload);
+            await client.PostAsync(requestUrl, new StringContent(json, Encoding.UTF8, "application/json"));
+        }
+
+        /// <summary>
+        /// Posts an object to the specified <paramref name="requestUrl"/> as serialized JSON
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="client"></param>
+        /// <param name="requestUrl"></param>
+        /// <param name="dataPayload"></param>
+        /// <returns></returns>
+        public static void PostAsJson<T>(this HttpClient client, string requestUrl, T dataPayload)
+        {
+            PostAsJsonAsync(client, requestUrl, dataPayload).RunSynchronously();
+        }
+
         /// <summary>
         /// Forces a datetime to be UTC - throws if passed a Local
         /// </summary>

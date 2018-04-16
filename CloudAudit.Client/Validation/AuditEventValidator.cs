@@ -1,15 +1,29 @@
-﻿using CloudAudit.Client.Model;
-using LiteGuard;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using System.Linq;
-
-namespace CloudAudit.Client.Validation
+﻿namespace CloudAudit.Client.Validation
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Globalization;
+    using System.Linq;
+
+    using CloudAudit.Client.Model;
+
+    using LiteGuard;
+
+    /// <summary>
+    /// Custom validation class for the <see cref="AuditEvent"/> DTO
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.DataAnnotations.ValidationAttribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public sealed class AuditEventValidatorAttribute : ValidationAttribute
     {
+        /// <summary>
+        /// Returns true if the <see cref="AuditEvent"/> DTO is valid.
+        /// </summary>
+        /// <param name="value">The value to validate.</param>
+        /// <param name="validationContext">The context information about the validation operation.</param>
+        /// <returns>
+        /// An instance of the <see cref="T:System.ComponentModel.DataAnnotations.ValidationResult" /> class.
+        /// </returns>
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             Guard.AgainstNullArgument(nameof(value), value);
@@ -87,11 +101,23 @@ namespace CloudAudit.Client.Validation
             return ValidationResult.Success;
         }
 
+        /// <summary>
+        /// Sanitises the whitespace as null.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         private static string SanitiseWhitespaceAsNull(string value)
         {
             return !string.IsNullOrWhiteSpace(value) ? value : null;
         }
 
+        /// <summary>
+        /// Determines whether all values in the set are non-null.
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <returns>
+        ///   <c>true</c> if [is valid required set] [the specified values]; otherwise, <c>false</c>.
+        /// </returns>
         private static bool IsValidRequiredSet(params string[] values)
         {
             return !values.Any(s => string.IsNullOrWhiteSpace(s)) ||

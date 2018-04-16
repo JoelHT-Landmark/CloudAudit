@@ -1,18 +1,33 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography;
-using CloudAudit.Client.Model;
-using CloudAudit.Client.ServiceBus;
-using Microsoft.ServiceBus.Messaging;
-using Newtonsoft.Json;
-
-namespace CloudAudit.Client.Encryption
+﻿namespace CloudAudit.Client.Encryption
 {
+    using System;
+    using System.IO;
+    using System.Security.Cryptography;
+
+    using CloudAudit.Client.ServiceBus;
+
+    using Microsoft.ServiceBus.Messaging;
+
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// Implementation of a message encryptor / decryptor that uses the
+    /// <see cref="RijndaelManaged"/> encryption scheme
+    /// </summary>
+    /// <seealso cref="CloudAudit.Client.Encryption.IMessageEncryption" />
     public class MessageEncryption : IMessageEncryption
     {
         private static readonly int KeySizeBits = 256;
         private static readonly int KeySizeBytes = 32;
 
+        /// <summary>
+        /// Encrypts the message body.
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <param name="message">The message.</param>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
+        /// <exception cref="MessageEncryptionException">Could not encrypt message</exception>
         public BrokeredMessage EncryptMessageBody<TMessage>(TMessage message, string key) where TMessage : class
         {
             BrokeredMessage encryptedMessage;
@@ -49,7 +64,15 @@ namespace CloudAudit.Client.Encryption
             return encryptedMessage;
         }
 
-        public TMessage DecryptyMessageBody<TMessage>(BrokeredMessage message, string key) where TMessage : class
+        /// <summary>
+        /// Decrypts the message body.
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <param name="message">The message.</param>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
+        /// <exception cref="MessageEncryptionException">Could not decrypt message</exception>
+        public TMessage DecryptMessageBody<TMessage>(BrokeredMessage message, string key) where TMessage : class
         {
             TMessage decryptedMessage;
             var byteKey = GetKeyFromString(key);
@@ -83,6 +106,14 @@ namespace CloudAudit.Client.Encryption
             return decryptedMessage;
         }
 
+        /// <summary>
+        /// Gets the key from string.
+        /// </summary>
+        /// <param name="keyString">The key string.</param>
+        /// <returns></returns>
+        /// <exception cref="MessageEncryptionException">
+        /// Invalid key
+        /// </exception>
         private byte[] GetKeyFromString(string keyString)
         {
             byte[] key;
@@ -103,6 +134,10 @@ namespace CloudAudit.Client.Encryption
             return key;
         }
 
+        /// <summary>
+        /// Setups the rijndael.
+        /// </summary>
+        /// <param name="rijndael">The rijndael.</param>
         private void SetupRijndael(RijndaelManaged rijndael)
         {
             rijndael.KeySize = KeySizeBits;

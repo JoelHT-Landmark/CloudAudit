@@ -1,12 +1,15 @@
-﻿using System;
-using System.Globalization;
-using CloudAudit.Client.Model;
-using CloudAudit.Client.Tests.Mocks;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace CloudAudit.Client.Tests
+﻿namespace CloudAudit.Client.Tests
 {
+    using System;
+    using System.Globalization;
+
+    using CloudAudit.Client.Model;
+    using CloudAudit.Client.Tests.Mocks;
+
+    using FluentAssertions;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     [TestClass]
     public partial class AuditRequestTests
     {

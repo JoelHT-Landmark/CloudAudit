@@ -1,18 +1,21 @@
-﻿using CloudAudit.Client.Encryption;
-using CloudAudit.Client.Model;
-using CloudAudit.Client.Tests.Mocks;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CloudAudit.Client.Tests
+﻿namespace CloudAudit.Client.Tests
 {
+    using System;
+    using System.Globalization;
+
+    using CloudAudit.Client.Encryption;
+    using CloudAudit.Client.Model;
+    using CloudAudit.Client.Tests.Mocks;
+
+    using FluentAssertions;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// Tests for the <see cref="AuditEvent"/> class
+    /// </summary>
     [TestClass]
     public partial class AuditEventTests
     {
@@ -21,6 +24,10 @@ namespace CloudAudit.Client.Tests
             return Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(8) + ".txt";
         }
 
+        /// <summary>
+        /// Tests that the <see cref="AuditEvent"/> constructor builds an audit event 
+        /// from the <see cref="AuditReqest"/> source as expected.
+        /// </summary>
         [TestMethod]
         public void AuditEventConstructorBuildsAuditEventFromAuditRequestAsExpected()
         {
@@ -28,12 +35,12 @@ namespace CloudAudit.Client.Tests
             var mockAttachment = new MockAttachment();
             var request = AuditRequest.AsChangeTo(mockCase, c => c.SysRef)
                 .WithData(mockAttachment, a => a.Id.ToString(CultureInfo.InvariantCulture))
-                .AsEvent(nameof(AuditEventConstructorBuildsAuditEventFromAuditRequestAsExpected))
+                .AsEvent(nameof(this.AuditEventConstructorBuildsAuditEventFromAuditRequestAsExpected))
                 .WithDescription("Cool Stuff");
 
             var auditEvent = new AuditEvent(request);
             auditEvent.OperationType.Should().Be(OperationType.Change);
-            auditEvent.EventType.Should().Be(nameof(AuditEventConstructorBuildsAuditEventFromAuditRequestAsExpected));
+            auditEvent.EventType.Should().Be(nameof(this.AuditEventConstructorBuildsAuditEventFromAuditRequestAsExpected));
             auditEvent.TargetType.Should().Be(typeof(MockCase).Name);
             auditEvent.TargetId.Should().Be(mockCase.SysRef);
             auditEvent.DataType.Should().Be(typeof(MockAttachment).FullName);
@@ -68,7 +75,7 @@ namespace CloudAudit.Client.Tests
             var crypto = new MessageEncryption();
             var encryptedMessage = crypto.EncryptMessageBody(auditEvent, key);
 
-            var decryptedEvent = crypto.DecryptyMessageBody<AuditEvent>(encryptedMessage, key);
+            var decryptedEvent = crypto.DecryptMessageBody<AuditEvent>(encryptedMessage, key);
             decryptedEvent.TargetType.Should().Be(typeof(MockCase).Name);
             decryptedEvent.TargetId.Should().Be(mockCase.SysRef);
 
@@ -101,7 +108,7 @@ namespace CloudAudit.Client.Tests
             var crypto = new MessageEncryption();
             var encryptedMessage = crypto.EncryptMessageBody(auditEvent, key);
 
-            var decryptedEvent = crypto.DecryptyMessageBody<AuditEvent>(encryptedMessage, key);
+            var decryptedEvent = crypto.DecryptMessageBody<AuditEvent>(encryptedMessage, key);
             decryptedEvent.TargetType.Should().Be(typeof(MockCase).Name);
             decryptedEvent.TargetId.Should().Be(mockCase.SysRef);
 

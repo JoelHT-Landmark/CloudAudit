@@ -1,20 +1,37 @@
-﻿using CloudAudit.Client.Extensions;
-using CloudAudit.Client.Validation;
-using LiteGuard;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Contracts;
-using System.Globalization;
-
-namespace CloudAudit.Client.Model
+﻿namespace CloudAudit.Client.Model
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+
+    using CloudAudit.Client.Extensions;
+    using CloudAudit.Client.Validation;
+
+    using LiteGuard;
+
+    /// <summary>
+    /// DTO representing an abstracted Audit event (see Maxims)
+    /// </summary>
     [AuditEventValidator]
     public class AuditEvent
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuditEvent" /> class.
+        /// </summary>
         protected internal AuditEvent()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuditEvent"/> class.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <exception cref="ArgumentException">
+        /// Source must have a non-null Timestamp - source
+        /// or
+        /// Source must have a UTC Timestamp - source
+        /// </exception>
         protected internal AuditEvent(AuditRequest source)
         {
             Contract.Requires(source != null);
@@ -142,7 +159,10 @@ namespace CloudAudit.Client.Model
         /// </summary>
         public string SessionId { get; set; }
 
-        internal void EnsureValid()
+        /// <summary>
+        /// Ensures this instance is valid.
+        /// </summary>
+        public void EnsureValid()
         {
             Validator.ValidateObject(this, new ValidationContext(this));
         }

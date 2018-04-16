@@ -1,10 +1,12 @@
-﻿using CloudAudit.Client.Model;
-using LiteGuard;
-using System;
-using System.Diagnostics.Contracts;
-
-namespace CloudAudit.Client
+﻿namespace CloudAudit.Client
 {
+    using System;
+    using System.Diagnostics.Contracts;
+
+    using CloudAudit.Client.Model;
+
+    using LiteGuard;
+
     public class AuditRequest
     {
         protected internal static Func<DateTime> TimeProvider = () => DateTime.UtcNow;

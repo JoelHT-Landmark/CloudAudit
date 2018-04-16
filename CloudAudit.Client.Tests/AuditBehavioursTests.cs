@@ -1,16 +1,15 @@
-﻿using CloudAudit.Client.Behaviours;
-using CloudAudit.Client.Model;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CloudAudit.Client.Tests
+﻿namespace CloudAudit.Client.Tests
 {
+    using System;
+    using System.Security.Claims;
+
+    using CloudAudit.Client.Behaviours;
+    using CloudAudit.Client.Model;
+
+    using FluentAssertions;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     [TestClass]
     public class AuditBehavioursTests
     {

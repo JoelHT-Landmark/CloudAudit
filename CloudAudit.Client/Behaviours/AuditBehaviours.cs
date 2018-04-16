@@ -1,16 +1,16 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading;
-
-using CloudAudit.Client.Model;
-
-using LiteGuard;
-
-namespace CloudAudit.Client.Behaviours
+﻿namespace CloudAudit.Client.Behaviours
 {
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading;
+
+    using CloudAudit.Client.Model;
+
+    using LiteGuard;
+
     internal static class AuditBehaviours
     {
         internal static void SetMachineNameToEnvironmentMachineName(AuditEvent auditEvent)

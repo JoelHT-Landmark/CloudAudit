@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace CloudAudit.Client.Tests.Mocks
+﻿namespace CloudAudit.Client.Tests.Mocks
 {
+    using System;
+
     public class MockCase
     {
         public string SysRef { get; set; } = GetRandomSysRef();

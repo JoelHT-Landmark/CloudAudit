@@ -1,16 +1,31 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using CloudAudit.Client.Extensions;
-using LiteGuard;
-
-namespace CloudAudit.Client.Validation
+﻿namespace CloudAudit.Client.Validation
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Globalization;
+
+    using CloudAudit.Client.Extensions;
+
+    using LiteGuard;
+
+    /// <summary>
+    /// Validation attribute indicating that when the decorated property is non-null, the
+    /// associated property must also be non-null (and vice versa)
+    /// </summary>
+    /// <remarks>
+    /// Never quite got this working - but it's a useful documentation decorator
+    /// anyway. See <see cref="AuditEventValidatorAttribute"/>
+    /// </remarks>
+    /// <seealso cref="System.ComponentModel.DataAnnotations.ValidationAttribute" />
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments",
         Justification = "Not required for a validation attribute")]
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public sealed class RequiredTogetherWithAttribute : ValidationAttribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequiredTogetherWithAttribute"/> class.
+        /// </summary>
+        /// <param name="otherFieldName">Name of the other field.</param>
         public RequiredTogetherWithAttribute(string otherFieldName)
             : base()
         {
@@ -18,8 +33,17 @@ namespace CloudAudit.Client.Validation
             this.OtherField = otherFieldName;
         }
 
+        /// <summary>
+        /// Gets the name of the "other" field.
+        /// </summary>
+        /// <value>
+        /// The other field.
+        /// </value>
         public string OtherField { get; private set; }
 
+        /// <summary>
+        /// Gets a value that indicates whether the attribute requires validation context.
+        /// </summary>
         public override bool RequiresValidationContext
         {
             get
@@ -28,6 +52,14 @@ namespace CloudAudit.Client.Validation
             }
         }
 
+        /// <summary>
+        /// Returns true if ... is valid.
+        /// </summary>
+        /// <param name="value">The value to validate.</param>
+        /// <param name="validationContext">The context information about the validation operation.</param>
+        /// <returns>
+        /// An instance of the <see cref="T:System.ComponentModel.DataAnnotations.ValidationResult" /> class.
+        /// </returns>
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             Guard.AgainstNullArgument(nameof(value), value);

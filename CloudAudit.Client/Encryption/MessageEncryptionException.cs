@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace CloudAudit.Client.Encryption
+﻿namespace CloudAudit.Client.Encryption
 {
+    using System;
+
     public class MessageEncryptionException : Exception
     {
         public MessageEncryptionException()

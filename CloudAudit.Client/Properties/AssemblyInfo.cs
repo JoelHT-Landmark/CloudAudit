@@ -1,4 +1,10 @@
-﻿using System.Reflection;
+﻿// <copyright file="AssemblyInfo.cs" company="Landmark Information Group Ltd">
+// Copyright (c) 2018 All Rights Reserved
+// </copyright>
+// <author>Joel Hammond-Turner</author>
+// <summary>AssemblyInfo for CloudAudit.Client</summary>
+
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

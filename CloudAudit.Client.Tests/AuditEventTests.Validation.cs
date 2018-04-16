@@ -1,15 +1,15 @@
-﻿using CloudAudit.Client.Model;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CloudAudit.Client.Tests
+﻿namespace CloudAudit.Client.Tests
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+
+    using CloudAudit.Client.Model;
+
+    using FluentAssertions;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     public partial class AuditEventTests
     {
         [TestMethod]

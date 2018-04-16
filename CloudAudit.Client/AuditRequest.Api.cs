@@ -1,14 +1,12 @@
-﻿using CloudAudit.Client.Model;
-using LiteGuard;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CloudAudit.Client
+﻿namespace CloudAudit.Client
 {
+    using System;
+    using System.Diagnostics.Contracts;
+
+    using CloudAudit.Client.Model;
+
+    using LiteGuard;
+
     public static class AuditRequestApi
     {
         public static AuditRequest WithData<T>(this AuditRequest source, T data, Func<T, string> dataIdAccessor)
