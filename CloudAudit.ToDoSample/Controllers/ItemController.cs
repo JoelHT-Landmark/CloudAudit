@@ -1,16 +1,31 @@
 ﻿namespace todo.Controllers
 {
+    using System.Configuration;
     using System.Net;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using CloudAudit.Client;
     using Models;
 
     public class ItemController : Controller
     {
+        private readonly IAuditClient auditClient;
+
+        public ItemController()
+        {
+            this.auditClient = new AuditHttpClient(ConfigurationManager.AppSettings["Audit.ServiceBase"]);
+        }
+
         [ActionName("Index")]
         public async Task<ActionResult> IndexAsync()
         {
             var items = await DocumentDBRepository<Item>.GetItemsAsync(d => !d.Completed);
+
+            await this.auditClient.AuditAsync(
+                AuditRequest.AsViewOf(typeof(ItemCollection), "All-Not-Completed")
+                .AsEvent("ViewedAllNonCompletedItems")
+                .WithNoData());
+
             return View(items);
         }
 
@@ -29,7 +44,14 @@
         {
             if (ModelState.IsValid)
             {
-                await DocumentDBRepository<Item>.CreateItemAsync(item);
+                var createdDocument = await DocumentDBRepository<Item>.CreateItemAsync(item);
+                item.Id = createdDocument.Id;
+
+                await this.auditClient.AuditAsync(
+                    AuditRequest.AsChangeTo(item, i => i.Id)
+                    .AsEvent("CreatedItem")
+                    .WithData(item, i => i.Id));
+
                 return RedirectToAction("Index");
             }
 
@@ -44,6 +66,12 @@
             if (ModelState.IsValid)
             {
                 await DocumentDBRepository<Item>.UpdateItemAsync(item.Id, item);
+
+                await this.auditClient.AuditAsync(
+                    AuditRequest.AsChangeTo(item, i => i.Id)
+                    .AsEvent("EditedItem")
+                    .WithData(item, i => i.Id));
+
                 return RedirectToAction("Index");
             }
 
@@ -64,6 +92,12 @@
                 return HttpNotFound();
             }
 
+            await this.auditClient.AuditAsync(
+                AuditRequest.AsViewOf(item, i => i.Id)
+                .AsEvent("ViewedItemDetail")
+                .WithData(item, i => i.Id)
+                .WithDescription("Viewed item detail for editing"));
+
             return View(item);
         }
 
@@ -81,6 +115,12 @@
                 return HttpNotFound();
             }
 
+            await this.auditClient.AuditAsync(
+                AuditRequest.AsViewOf(item, i => i.Id)
+                .AsEvent("ViewedItemDetail")
+                .WithData(item, i => i.Id)
+                .WithDescription("Viewed item detail for deleting"));
+
             return View(item);
         }
 
@@ -90,6 +130,12 @@
         public async Task<ActionResult> DeleteConfirmedAsync([Bind(Include = "Id")] string id)
         {
             await DocumentDBRepository<Item>.DeleteItemAsync(id);
+
+            await this.auditClient.AuditAsync(
+                AuditRequest.AsActionOn(typeof(Item), id)
+                .AsEvent("DeletedItem")
+                .WithNoData());
+
             return RedirectToAction("Index");
         }
 
@@ -97,6 +143,13 @@
         public async Task<ActionResult> DetailsAsync(string id)
         {
             Item item = await DocumentDBRepository<Item>.GetItemAsync(id);
+
+            await this.auditClient.AuditAsync(
+                AuditRequest.AsViewOf(item, i => i.Id)
+                .AsEvent("ViewedItemDetail")
+                .WithData(item, i => i.Id)
+                .WithDescription("Viewed item detail for editing"));
+
             return View(item);
         }
     }
