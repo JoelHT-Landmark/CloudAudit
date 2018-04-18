@@ -6,6 +6,7 @@
 namespace CloudAudit.ConsoleSample
 {
     using System;
+    using System.Configuration;
     using System.Diagnostics.Contracts;
     using System.Threading.Tasks;
     using CloudAudit.Client;
@@ -42,8 +43,8 @@ namespace CloudAudit.ConsoleSample
 
             ConfigureAuditing.ForCurrentSignedInUser();
 
-            var client = new AuditHttpClient("https://azureinaction.azurewebsites.net/");
-            ////var client = new new AuditServiceBusClient();
+            ////var client = new AuditHttpClient(ConfigurationManager.AppSettings["Audit.ServiceBase"]);
+            var client = new AuditServiceBusClient(ConfigurationManager.AppSettings["Audit.ServiceBus"]);
 
             var program = new Program(client);
             program.Run().Wait();

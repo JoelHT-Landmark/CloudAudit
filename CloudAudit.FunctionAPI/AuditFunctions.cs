@@ -28,8 +28,8 @@ namespace CloudAudit.FunctionAPI
                                AccessRights.Listen, Connection = "Audit.ServiceBus")]
         BrokeredMessage message, TraceWriter log)
         {
-            var auditEvent = message.GetBody<AuditEvent>();
-
+            var payload = message.GetBody<string>();
+            var auditEvent = JsonConvert.DeserializeObject<AuditEvent>(payload);
             var service = new CosmosDbAuditService();
             await service.AuditAsync(auditEvent);
         }
