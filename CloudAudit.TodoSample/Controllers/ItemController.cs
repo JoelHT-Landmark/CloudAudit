@@ -13,7 +13,8 @@
 
         public ItemController()
         {
-            this.auditClient = new AuditHttpClient(ConfigurationManager.AppSettings["Audit.ServiceBase"]);
+            ////this.auditClient = new AuditHttpClient(ConfigurationManager.AppSettings["Audit.ServiceBase"]);
+            this.auditClient = new AuditServiceBusClient(ConfigurationManager.AppSettings["Audit.ServiceBus"]);
         }
 
         [ActionName("Index")]
