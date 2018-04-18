@@ -84,12 +84,12 @@
             }
 
             // Ensure we have a UserId / UserName / UserEmail / UserIdentifier set
-            if (!IsValidRequiredSet(auditEvent.UserId, auditEvent.UserName, auditEvent.UserEmail, auditEvent.UserIdentity))
+            if (!IsValidRequiredSet(auditEvent.UserId, auditEvent.UserName)) ////, auditEvent.UserEmail, auditEvent.UserIdentity))
             {
                 validationContext.Items.Add(nameof(AuditEvent.UserId), "UserId, UserName, UserEmail and UserIdentifier are required together.");
                 validationContext.Items.Add(nameof(AuditEvent.UserName), "UserId, UserName, UserEmail and UserIdentifier are required together.");
-                validationContext.Items.Add(nameof(AuditEvent.UserEmail), "UserId, UserName, UserEmail and UserIdentifier are required together.");
-                validationContext.Items.Add(nameof(AuditEvent.UserIdentity), "UserId, UserName, UserEmail and UserIdentifier are required together.");
+                ////validationContext.Items.Add(nameof(AuditEvent.UserEmail), "UserId, UserName, UserEmail and UserIdentifier are required together.");
+                ////validationContext.Items.Add(nameof(AuditEvent.UserIdentity), "UserId, UserName, UserEmail and UserIdentifier are required together.");
             }
 
             if (validationContext.Items.Any())

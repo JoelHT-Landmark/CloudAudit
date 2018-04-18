@@ -40,6 +40,8 @@ namespace CloudAudit.ConsoleSample
             Console.Write("Press ENTER to start...");
             Console.ReadLine();
 
+            ConfigureAuditing.ForCurrentSignedInUser();
+
             var client = new AuditHttpClient("https://azureinaction.azurewebsites.net/");
             ////var client = new new AuditServiceBusClient();
 

@@ -74,7 +74,7 @@
         {
             var auditEvent = auditRequest.AsAuditEvent();
 
-            //// AuditConfiguration.Current.ApplyTo(auditEvent);
+            AuditConfiguration.Current.ApplyTo(auditEvent);
             auditEvent.EnsureValid();
 
             var url = $"{this.serviceBase}/api/{AuditAsyncRoute}";
@@ -90,7 +90,7 @@
         {
             var auditEvent = auditRequest.AsAuditEvent();
 
-            //AuditConfiguration.Current.ApplyTo(auditEvent);
+            AuditConfiguration.Current.ApplyTo(auditEvent);
             auditEvent.EnsureValid();
 
             var url = $"{this.serviceBase}/api/{AuditAsyncRoute}";
