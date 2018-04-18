@@ -1,6 +1,5 @@
 ﻿namespace todo
 {
-    using CloudAudit.Client;
     using System.Web.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
@@ -15,8 +14,6 @@
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             DocumentDBRepository<todo.Models.Item>.Initialize();
-
-            ConfigureAuditing.ForCurrentSignedInUser();
         }
     }
 }

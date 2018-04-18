@@ -2,7 +2,6 @@
 {
     using Microsoft.Azure.Documents;
     using Newtonsoft.Json;
-    using System.Collections.ObjectModel;
 
     public class Item
     {
@@ -17,9 +16,5 @@
 
         [JsonProperty(PropertyName = "isComplete")]
         public bool Completed { get; set; }
-    }
-
-    public class ItemCollection : Collection<Item>
-    {
     }
 }

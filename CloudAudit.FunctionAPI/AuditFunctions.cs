@@ -12,22 +12,27 @@ namespace CloudAudit.FunctionAPI
     using Microsoft.Azure.WebJobs;
     using Microsoft.Azure.WebJobs.Extensions.Http;
     using Microsoft.Azure.WebJobs.Host;
+    using Microsoft.ServiceBus.Messaging;
     using Newtonsoft.Json;
 
     public static class AuditFunctions
     {
+        const string SubscriptionName = "CloudAudit";
         static AuditFunctions()
         {
         }
 
-        ////[FunctionName(nameof(AuditAsyncViaServiceBus))]
-        ////public static async Task AuditAsyncViaServiceBus(
-        ////    [QueueTrigger(AuditServiceBusClient.ServiceBusTopicName, Connection = "")]
-        ////    AuditEvent auditEvent, TraceWriter log)
-        ////{
-        ////    var service = new CosmosDbAuditService();
-        ////    await service.AuditAsync(auditEvent);
-        ////}
+        [FunctionName(nameof(AuditAsyncViaServiceBus))]
+        public static async Task AuditAsyncViaServiceBus(
+            [ServiceBusTrigger(AuditServiceBusClient.ServiceBusTopicName, SubscriptionName, 
+                               AccessRights.Listen, Connection = "Audit.ServiceBus")]
+        BrokeredMessage message, TraceWriter log)
+        {
+            var auditEvent = message.GetBody<AuditEvent>();
+
+            var service = new CosmosDbAuditService();
+            await service.AuditAsync(auditEvent);
+        }
 
         [FunctionName(nameof(AuditAsyncViaHttp))]
         public static async Task<HttpResponseMessage> AuditAsyncViaHttp(
