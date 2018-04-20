@@ -15,9 +15,14 @@
 
         public ItemController()
         {
-            this.auditClient = new AuditHttpClient(ConfigurationManager.AppSettings["Audit.ServiceBase"]);
-            ////this.auditClient = new AuditServiceBusClient(ConfigurationManager.AppSettings["Audit.ServiceBus"]);
-
+            if (ConfigurationManager.AppSettings["Audit.UseServiceBus"] == "true")
+            {
+                this.auditClient = new AuditServiceBusClient(ConfigurationManager.AppSettings["Audit.ServiceBus"]);
+            }
+            else
+            {
+                this.auditClient = new AuditHttpClient(ConfigurationManager.AppSettings["Audit.ServiceBase"]);
+            }
             this.auditReadClient = new AuditHttpClient(ConfigurationManager.AppSettings["Audit.ServiceBase"]);
         }
 

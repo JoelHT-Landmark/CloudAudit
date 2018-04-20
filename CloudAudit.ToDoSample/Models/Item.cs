@@ -3,6 +3,9 @@
     using Microsoft.Azure.Documents;
     using Newtonsoft.Json;
     using System.Collections.ObjectModel;
+    using System.ComponentModel.DataAnnotations;
+
+    using DADataType = System.ComponentModel.DataAnnotations.DataType;
 
     public class Item
     {
@@ -13,6 +16,7 @@
         public string Name { get; set; }
 
         [JsonProperty(PropertyName = "description")]
+        [DataType(DADataType.MultilineText)]
         public string Description { get; set; }
 
         [JsonProperty(PropertyName = "isComplete")]

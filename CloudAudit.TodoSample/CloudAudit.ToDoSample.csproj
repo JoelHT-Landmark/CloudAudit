@@ -162,6 +162,8 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <None Include="Properties\PublishProfiles\azureinaction-todo - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\azureinaction-todo - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\docdbtododotnet.pubxml" />
     <None Include="Properties\PublishProfiles\todo.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
