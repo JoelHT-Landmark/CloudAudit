@@ -6,16 +6,20 @@
     using System.Threading.Tasks;
 
     using CloudAudit.Client.Extensions;
+    using CloudAudit.Client.Model;
 
     using LiteGuard;
+    using Newtonsoft.Json;
 
     /// <summary>
-    /// Implementation of <see cref="IAuditClient"/> that uses direct
-    /// HTTP calls to the Azure Function
+    /// Implementation of <see cref="IAuditClient"/> and
+    /// <see cref="IAuditReadClient"/> that uses direct
+    /// HTTP calls to the Azure Functions
     /// </summary>
     /// <seealso cref="CloudAudit.Client.IAuditClient" />
+    /// <seealso cref="CloudAudit.Client.IAuditReadClient" />
     /// <seealso cref="System.IDisposable" />
-    public class AuditHttpClient : IAuditClient, IDisposable
+    public class AuditHttpClient : IAuditClient, IAuditReadClient, IDisposable
     {
         public const string AuditAsyncRoute = "audit";
 
@@ -95,6 +99,65 @@
 
             var url = $"{this.serviceBase}/api/{AuditAsyncRoute}";
             await this.httpClient.PostAsJsonAsync(url, auditEvent);
+        }
+
+        /// <summary>
+        /// Function for retrieving the audit list from the Cosmos DB
+        /// </summary>
+        /// <param name="targetType"></param>
+        /// <param name="targetId"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchTerm"></param>
+        /// <param name="continuationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<AuditList> GetAuditItemsListAsync(
+            string targetType, 
+            string targetId, 
+            int pageSize, 
+            string searchTerm)
+        {
+            return await GetAuditItemsListAsync(targetType, targetId, pageSize, searchTerm, string.Empty);
+        }
+
+        /// <summary>
+        /// Function for retrieving the audit list from the Cosmos DB
+        /// </summary>
+        /// <param name="targetType"></param>
+        /// <param name="targetId"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchTerm"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<AuditList> GetAuditItemsListAsync(
+            string targetType, 
+            string targetId, 
+            int pageSize, 
+            string searchTerm, 
+            string continuationToken)
+        {
+            var requestUrl = $"{this.serviceBase}/api/{AuditAsyncRoute}/{targetType}/{targetId}/{pageSize}";
+            if (searchTerm != string.Empty)
+            {
+                requestUrl += "?searchTerm=" + searchTerm;
+            }
+
+            if (continuationToken != string.Empty)
+            {
+                this.httpClient.DefaultRequestHeaders.Add("ContinuationToken", continuationToken);
+            }
+
+            var response = await this.httpClient.GetAsync(requestUrl);
+            var json = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<AuditList>(json);
+            }
+            else
+            {
+                throw new Exception(string.Format("Unable to retrieve {0} number of audit items for target id {1} and targetType {2}", pageSize, targetId, targetType));
+            }
         }
     }
 }

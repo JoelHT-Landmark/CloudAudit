@@ -6,15 +6,19 @@
     using System.Web.Mvc;
     using CloudAudit.Client;
     using Models;
+    using todo.ViewModels;
 
     public class ItemController : Controller
     {
         private readonly IAuditClient auditClient;
+        private readonly IAuditReadClient auditReadClient;
 
         public ItemController()
         {
-            ////this.auditClient = new AuditHttpClient(ConfigurationManager.AppSettings["Audit.ServiceBase"]);
-            this.auditClient = new AuditServiceBusClient(ConfigurationManager.AppSettings["Audit.ServiceBus"]);
+            this.auditClient = new AuditHttpClient(ConfigurationManager.AppSettings["Audit.ServiceBase"]);
+            ////this.auditClient = new AuditServiceBusClient(ConfigurationManager.AppSettings["Audit.ServiceBus"]);
+
+            this.auditReadClient = new AuditHttpClient(ConfigurationManager.AppSettings["Audit.ServiceBase"]);
         }
 
         [ActionName("Index")]
@@ -145,13 +149,16 @@
         {
             Item item = await DocumentDBRepository<Item>.GetItemAsync(id);
 
+            var auditList = await this.auditReadClient.GetAuditItemsListAsync(
+                typeof(Item).Name, id, 100, string.Empty);
+
             await this.auditClient.AuditAsync(
                 AuditRequest.AsViewOf(item, i => i.Id)
                 .AsEvent("ViewedItemDetail")
                 .WithData(item, i => i.Id)
-                .WithDescription("Viewed item detail for editing"));
+                .WithDescription("Viewed item detail"));
 
-            return View(item);
+            return View(new ItemDetail(item, auditList));
         }
     }
 }

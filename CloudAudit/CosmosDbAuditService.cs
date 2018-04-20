@@ -1,8 +1,8 @@
 ﻿namespace CloudAudit
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Security;
     using System.Threading.Tasks;
 
     using CloudAudit.Client.Model;
@@ -11,6 +11,7 @@
 
     using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
+    using Microsoft.Azure.Documents.Linq;
 
     /// <summary>
     /// Implementation of <see cref="IAuditService"/> that persists 
@@ -30,7 +31,6 @@
         {
             this.accountEndpoint = Environment.GetEnvironmentVariable("CosmosDbAccountEndpoint", EnvironmentVariableTarget.Process);
             this.accountKey = Environment.GetEnvironmentVariable("CosmosDbAccountKey", EnvironmentVariableTarget.Process);
-
         }
 
         /// <summary>
@@ -113,5 +113,79 @@
                 await client.CreateDocumentCollectionIfNotExistsAsync(dbUri, docDefinition, options);
             }
         }
+
+        /// <summary>
+        /// Fetch audit records from the document database matching the search term
+        /// </summary>
+        /// <param name="targetType">audit target type</param>
+        /// <param name="targetId">audit target id</param>
+        /// <param name="searchTerm">search term </param>
+        /// <param name="pageSize">number of records to return</param>
+        /// <param name="continuationToken">Continuous token string for the next page.</param>
+        /// <returns>return AuditList object</returns>
+        public async Task<AuditList> RetrieveAuditListAsync(
+            string targetType, 
+            string targetId, 
+            string searchTerm, 
+            int pageSize, 
+            string continuationToken)
+        {
+            Contract.Requires(!string.IsNullOrWhiteSpace(targetType));
+            Contract.Requires(!string.IsNullOrWhiteSpace(targetId));
+            Guard.AgainstNullArgument(nameof(targetType), targetType);
+            Guard.AgainstNullArgument(nameof(targetId), targetId);
+            Contract.EndContractBlock();
+
+            var paramterCollection = new SqlParameterCollection(
+                new SqlParameter[]
+                {
+                    new SqlParameter { Name = "@TargetType", Value = targetType },
+                    new SqlParameter { Name = "@TargetId", Value = targetId }
+                });
+            AuditList auditList = new AuditList();
+
+            var sqlQuery = "SELECT a.id, a.EventType, a.Timestamp, a.DataType, a.Description, a.UserId, " +
+                    "a.UserName, a.UserEmail, a.OperationType  FROM audits a WHERE  a.PartitionKey = CONCAT(@TargetType,'-', @TargetId)";
+
+                // If the search term is not null add the search term also in the where 
+                if (searchTerm != null)
+                {
+                    sqlQuery += "  AND (CONTAINS(UPPER(a.UserName), UPPER(@SearchTerm)) OR CONTAINS(UPPER(a.EventType), UPPER(@SearchTerm)) )";
+                    paramterCollection.Add(new SqlParameter { Name = "@SearchTerm", Value = searchTerm });
+                }
+
+            sqlQuery += " ORDER BY a.Timestamp DESC";
+            var querySpec = new SqlQuerySpec(sqlQuery, paramterCollection);
+
+            var collectionLink = UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId);
+            var results = new List<AuditRecord>();
+            var nextContinuationToken = string.Empty;
+
+            using (var client = new DocumentClient(new Uri(this.accountEndpoint), this.accountKey))
+            {
+                IDocumentQuery<AuditRecord> query = client.CreateDocumentQuery<AuditRecord>(
+                    collectionLink,
+                    querySpec,
+                    new FeedOptions
+                    {
+                        MaxItemCount = pageSize,
+                        RequestContinuation = continuationToken,
+                        PartitionKey = new PartitionKey(targetType + "-" + targetId)
+                    }).AsDocumentQuery();
+
+                if (query.HasMoreResults)
+                {
+                    var result = await query.ExecuteNextAsync<AuditRecord>();
+                    nextContinuationToken = result.ResponseContinuation;
+                    results.AddRange(result);
+                }
+
+                auditList.ItemsList = results;
+                auditList.ContinuationToken = nextContinuationToken;
+            }
+
+            return auditList;
+        }        
     }
 }
+
