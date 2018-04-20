@@ -22,3 +22,11 @@ select,
 textarea {
     max-width: 280px;
 }
+
+
+/* Fixed height tables*/
+.table-fixed tbody {
+    max-height: 230px;
+    overflow-y: auto;
+    width: 100%;
+}

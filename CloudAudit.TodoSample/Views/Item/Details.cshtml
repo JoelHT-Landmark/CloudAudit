@@ -1,38 +1,61 @@
-﻿@model todo.Models.Item
-
+﻿@model todo.ViewModels.ItemDetail
 <h2>View To-Do Item Details</h2>
-
 <div>
-    <h4>Item</h4>
     <hr />
+    <h4>Item</h4>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Description)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Completed)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Completed)
         </dd>
-
     </dl>
 </div>
+<hr />
+<h4>Audit</h4>
+<div>
+    <table class="table table-fixed table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Timestamp V</th>
+                <th>User</th>
+                <th>Event</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var record in Model.AuditRecords)
+        {
+        <tr>
+            <td aria-hidden="true">
+                <i class="fas @record.OperationType.GetGlyphName()"
+                   title="@record.OperationType"></i>
+            </td>
+            <td>@record.Timestamp</td>
+            <td>@record.UserName</td>
+            <td>@record.EventType</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<hr />
+<h4>Actions</h4>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+<hr />
