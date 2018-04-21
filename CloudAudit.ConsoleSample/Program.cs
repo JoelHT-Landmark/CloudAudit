@@ -43,8 +43,8 @@ namespace CloudAudit.ConsoleSample
 
             ConfigureAuditing.ForCurrentSignedInUser();
 
-            ////var client = new AuditHttpClient(ConfigurationManager.AppSettings["Audit.ServiceBase"]);
-            var client = new AuditServiceBusClient(ConfigurationManager.AppSettings["Audit.ServiceBus"]);
+            var client = new AuditHttpClient(ConfigurationManager.AppSettings["Audit.ServiceBase"]);
+            ///var client = new AuditServiceBusClient(ConfigurationManager.AppSettings["Audit.ServiceBus"]);
 
             var program = new Program(client);
             program.Run().Wait();
