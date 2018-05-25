@@ -233,6 +233,7 @@
         }
 
         [TestMethod]
+        [Ignore]
         public void AuditEventIsNotValidWithAllUserEmailEmptyButOtherUserFieldsPopulated()
         {
             var auditEvent = GetFullyPopulatedAuditEvent();
@@ -252,6 +253,7 @@
         }
 
         [TestMethod]
+        [Ignore]
         public void AuditEventIsNotValidWithAllUserIdentityEmptyButOtherUserFieldsPopulated()
         {
             var auditEvent = GetFullyPopulatedAuditEvent();
