@@ -25,12 +25,12 @@
 
         public void ApplyTo(AuditEvent auditEvent)
         {
-            behaviours.ForEach(behaviour => behaviour(auditEvent));
+            this.behaviours.ForEach(behaviour => behaviour(auditEvent));
         }
 
         public IAuditConfiguration AddBehaviour(Action<AuditEvent> behaviour)
         {
-            behaviours.Add(behaviour);
+            this.behaviours.Add(behaviour);
             return this;
         }
 

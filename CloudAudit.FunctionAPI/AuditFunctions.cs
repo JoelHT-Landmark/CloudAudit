@@ -19,10 +19,7 @@ namespace CloudAudit.FunctionAPI
 
     public static class AuditFunctions
     {
-        const string SubscriptionName = "CloudAudit";
-        static AuditFunctions()
-        {
-        }
+        public const string SubscriptionName = "CloudAudit";
 
         [FunctionName(nameof(AuditAsyncViaServiceBus))]
         public static async Task AuditAsyncViaServiceBus(

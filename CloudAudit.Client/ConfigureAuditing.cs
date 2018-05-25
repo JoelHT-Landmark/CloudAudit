@@ -1,11 +1,13 @@
-﻿using CloudAudit.Client.Behaviours;
-using LiteGuard;
-using System;
-using System.Diagnostics.Contracts;
-using System.Security.Claims;
-
-namespace CloudAudit.Client
+﻿namespace CloudAudit.Client
 {
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Security.Claims;
+
+    using CloudAudit.Client.Behaviours;
+
+    using LiteGuard;
+
     public static class ConfigureAuditing
     {
         /// <summary>

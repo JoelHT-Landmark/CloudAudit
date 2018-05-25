@@ -11,8 +11,8 @@
     public class AuditServiceBusClient : IAuditClient
     {
         public const string ServiceBusTopicName = @"Audit";
+
         private readonly TopicClient topicClient;
-        private bool disposed;
 
         public AuditServiceBusClient(string connectionString)
         {

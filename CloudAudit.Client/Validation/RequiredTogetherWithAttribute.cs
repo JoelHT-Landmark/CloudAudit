@@ -68,7 +68,7 @@
             var validationTarget = validationContext.ObjectInstance;
 
             var objectType = validationTarget.GetType();
-            var otherValueProperty = objectType.GetProperty(OtherField);
+            var otherValueProperty = objectType.GetProperty(this.OtherField);
             var otherValueType = otherValueProperty.PropertyType;
 
             var otherValue = otherValueProperty.GetValue(this, null);
@@ -81,7 +81,7 @@
 
             if ((thisValueIsSet && !otherValueIsSet) || (!thisValueIsSet && otherValueIsSet))
             {
-                var message = string.Format(CultureInfo.InvariantCulture, "{0} is required if {1} is set.", thisField, OtherField);
+                var message = string.Format(CultureInfo.InvariantCulture, "{0} is required if {1} is set.", thisField, this.OtherField);
                 return new ValidationResult(message);
             }
 

@@ -11,5 +11,4 @@
             return Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(8);
         }
     }
-
 }

@@ -9,7 +9,7 @@
 
     public class AuditRequest
     {
-        protected internal static Func<DateTime> TimeProvider = () => DateTime.UtcNow;
+        private static Func<DateTime> timeProviderFunction = () => DateTime.UtcNow;
 
         protected AuditRequest(OperationType operationType, Type targetType, string targetId)
         {
@@ -22,7 +22,7 @@
             this.OperationType = operationType;
             this.TargetType = targetType.Name;
             this.TargetId = targetId;
-            this.Timestamp = TimeProvider();
+            this.Timestamp = timeProviderFunction();
         }
 
         /// <summary>
@@ -69,6 +69,12 @@
         /// Actual data modified with the action
         /// </summary>
         public dynamic Data { get; protected internal set; }
+
+        protected internal static Func<DateTime> TimeProvider
+        {
+            get { return timeProviderFunction; }
+            set { timeProviderFunction = value; }
+        }
 
         public static AuditRequest AsViewOf(Type targetType, string targetId)
         {

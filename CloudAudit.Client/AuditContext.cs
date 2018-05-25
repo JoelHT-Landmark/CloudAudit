@@ -4,7 +4,7 @@
 
     public static class AuditContext
     {
-        internal static ConcurrentDictionary<string, string> PersistentData = new ConcurrentDictionary<string, string>();
+        private static ConcurrentDictionary<string, string> persistentData = new ConcurrentDictionary<string, string>();
 
         /// <summary>
         /// Gets the ApplicationName
@@ -24,7 +24,7 @@
         public static string GetPersistentDataOrDefault(string key)
         {
             string result = null;
-            if (PersistentData.ContainsKey(key) && PersistentData.TryGetValue(key, out result))
+            if (persistentData.ContainsKey(key) && persistentData.TryGetValue(key, out result))
             {
                 return result;
             }
@@ -48,7 +48,7 @@
         /// <param name="value"></param>
         public static void AddOrUpdatePersistentData(string key, string value)
         {
-            PersistentData.AddOrUpdate(key, value, (oldValue, newValue) => newValue);
+            persistentData.AddOrUpdate(key, value, (oldValue, newValue) => newValue);
         }
     }
 }

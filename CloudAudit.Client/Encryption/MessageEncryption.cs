@@ -31,7 +31,7 @@
         public BrokeredMessage EncryptMessageBody<TMessage>(TMessage message, string key) where TMessage : class
         {
             BrokeredMessage encryptedMessage;
-            var byteKey = GetKeyFromString(key);
+            var byteKey = this.GetKeyFromString(key);
 
             try
             {
@@ -39,7 +39,7 @@
 
                 using (var rijndael = new RijndaelManaged())
                 {
-                    SetupRijndael(rijndael);
+                    this.SetupRijndael(rijndael);
                     rijndael.GenerateIV();
                     var initVector = rijndael.IV;
                     var encryptor = rijndael.CreateEncryptor(byteKey, initVector);
@@ -75,7 +75,7 @@
         public TMessage DecryptMessageBody<TMessage>(BrokeredMessage message, string key) where TMessage : class
         {
             TMessage decryptedMessage;
-            var byteKey = GetKeyFromString(key);
+            var byteKey = this.GetKeyFromString(key);
 
             try
             {
@@ -86,7 +86,7 @@
 
                 using (var rijndael = new RijndaelManaged())
                 {
-                    SetupRijndael(rijndael);
+                    this.SetupRijndael(rijndael);
                     var decryptor = rijndael.CreateDecryptor(byteKey, initVector);
 
                     using (var memoryStream = new MemoryStream(messagebody))
@@ -131,6 +131,7 @@
             {
                 throw new MessageEncryptionException("Invalid key", ex);
             }
+
             return key;
         }
 

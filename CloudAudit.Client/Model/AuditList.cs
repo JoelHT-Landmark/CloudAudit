@@ -9,4 +9,3 @@
         public string ContinuationToken { get; set; }
     }
 }
-

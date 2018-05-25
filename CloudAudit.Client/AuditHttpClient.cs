@@ -46,28 +46,8 @@
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Releases unmanaged and - optionally - managed resources.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                this.httpClient.Dispose();
-                this.httpClient = null;
-            }
-
-            disposed = true;
         }
 
         /// <summary>
@@ -117,7 +97,7 @@
             int pageSize, 
             string searchTerm)
         {
-            return await GetAuditItemsListAsync(targetType, targetId, pageSize, searchTerm, string.Empty);
+            return await this.GetAuditItemsListAsync(targetType, targetId, pageSize, searchTerm, string.Empty);
         }
 
         /// <summary>
@@ -158,6 +138,26 @@
             {
                 throw new Exception(string.Format("Unable to retrieve {0} number of audit items for target id {1} and targetType {2}", pageSize, targetId, targetType));
             }
+        }
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                this.httpClient.Dispose();
+                this.httpClient = null;
+            }
+
+            this.disposed = true;
         }
     }
 }

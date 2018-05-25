@@ -59,7 +59,7 @@
                     {
                         if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
                         {
-                            await CreateAuditCollectionIfNotExist();
+                            await this.CreateAuditCollectionIfNotExist();
 
                             await client.CreateDocumentAsync(collectionLink, auditDocument, null, true);
                         }
@@ -74,43 +74,11 @@
             {
                 return;
             }
-            catch (DocumentClientException docEx)
+            catch (DocumentClientException)
             {
                 ////For delaying the service bus recall.
                 await Task.Delay(3000);
                 throw;
-            }
-        }
-
-        /// <summary>
-        /// Creates the audit collection if it does not already exist.
-        /// </summary>
-        /// <returns></returns>
-        private async Task CreateAuditCollectionIfNotExist()
-        {
-            using (var client = new DocumentClient(new Uri(this.accountEndpoint), this.accountKey))
-            {
-                var database = new Database() { Id = DatabaseId };
-
-                await client.CreateDatabaseIfNotExistsAsync(database);
-
-                var docDefinition = new DocumentCollection();
-
-                var rangeIndex = new RangeIndex(DataType.String) { Precision = -1 };
-
-                docDefinition.Id = CollectionId;
-
-                docDefinition.PartitionKey.Paths.Add("/PartitionKey");
-
-                docDefinition.IndexingPolicy = new IndexingPolicy(rangeIndex);
-
-                docDefinition.IndexingPolicy.ExcludedPaths.Add(new ExcludedPath { Path = "/Data/*" });
-
-                var options = new RequestOptions() { OfferThroughput = DefaultThroughput };
-
-                var dbUri = UriFactory.CreateDatabaseUri(DatabaseId);
-
-                await client.CreateDocumentCollectionIfNotExistsAsync(dbUri, docDefinition, options);
             }
         }
 
@@ -185,7 +153,38 @@
             }
 
             return auditList;
-        }        
+        }
+
+        /// <summary>
+        /// Creates the audit collection if it does not already exist.
+        /// </summary>
+        /// <returns></returns>
+        private async Task CreateAuditCollectionIfNotExist()
+        {
+            using (var client = new DocumentClient(new Uri(this.accountEndpoint), this.accountKey))
+            {
+                var database = new Database() { Id = DatabaseId };
+
+                await client.CreateDatabaseIfNotExistsAsync(database);
+
+                var docDefinition = new DocumentCollection();
+
+                var rangeIndex = new RangeIndex(DataType.String) { Precision = -1 };
+
+                docDefinition.Id = CollectionId;
+
+                docDefinition.PartitionKey.Paths.Add("/PartitionKey");
+
+                docDefinition.IndexingPolicy = new IndexingPolicy(rangeIndex);
+
+                docDefinition.IndexingPolicy.ExcludedPaths.Add(new ExcludedPath { Path = "/Data/*" });
+
+                var options = new RequestOptions() { OfferThroughput = DefaultThroughput };
+
+                var cosmosDbUri = UriFactory.CreateDatabaseUri(DatabaseId);
+
+                await client.CreateDocumentCollectionIfNotExistsAsync(cosmosDbUri, docDefinition, options);
+            }
+        }
     }
 }
-

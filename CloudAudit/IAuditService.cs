@@ -27,7 +27,6 @@
             string targetId,
             string searchTerm,
             int pageSize,
-            string continuationToken
-            );
+            string continuationToken);
     }
 }

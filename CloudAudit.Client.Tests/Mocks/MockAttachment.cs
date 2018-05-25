@@ -5,6 +5,7 @@
     public class MockAttachment
     {
         public long Id { get; internal set; } = GetRandomAttachmentId();
+
         public string Filename { get; set; }
 
         public static long GetRandomAttachmentId()

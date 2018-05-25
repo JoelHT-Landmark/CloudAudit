@@ -19,11 +19,6 @@
     [TestClass]
     public partial class AuditEventTests
     {
-        private static string GetRandomFilename()
-        {
-            return Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(8) + ".txt";
-        }
-
         /// <summary>
         /// Tests that the <see cref="AuditEvent"/> constructor builds an audit event 
         /// from the <see cref="AuditReqest"/> source as expected.
@@ -67,7 +62,7 @@
 
             var request = AuditRequest.AsChangeTo(mockCase, c => c.SysRef)
                 .WithData(mockAttachment, a => a.Id.ToString(CultureInfo.InvariantCulture))
-                .AsEvent(nameof(AuditEventWithDataEncryptsAndDecryptsSuccessfully));
+                .AsEvent(nameof(this.AuditEventWithDataEncryptsAndDecryptsSuccessfully));
             var auditEvent = new AuditEvent(request);
 
             var key = "IlgY+s8d2q+QVXNx3ULHaUmNmcjgKQGXZFvxysqF5mA=";
@@ -100,7 +95,7 @@
 
             var request = AuditRequest.AsChangeTo(mockCase, c => c.SysRef)
                 .WithNoData()
-                .AsEvent(nameof(AuditEventWithNoDataEncryptsAndDecryptsSuccessfully));
+                .AsEvent(nameof(this.AuditEventWithNoDataEncryptsAndDecryptsSuccessfully));
             var auditEvent = new AuditEvent(request);
 
             var key = "IlgY+s8d2q+QVXNx3ULHaUmNmcjgKQGXZFvxysqF5mA=";
@@ -116,6 +111,11 @@
             decryptedEvent.DataId.Should().BeNull();
 
             Assert.IsTrue(object.ReferenceEquals(null, decryptedEvent.Data));
+        }
+
+        private static string GetRandomFilename()
+        {
+            return Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(8) + ".txt";
         }
     }
 }
