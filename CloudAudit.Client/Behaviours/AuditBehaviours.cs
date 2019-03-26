@@ -11,28 +11,53 @@
 
     using LiteGuard;
 
+    /// <summary>
+    /// Extension methods that implement specific common audit behaviours
+    /// </summary>
     internal static class AuditBehaviours
     {
+        /// <summary>
+        /// Sets the name of the machine name property to the current <see cref="Environment.MachineName"/>.
+        /// </summary>
+        /// <param name="auditEvent">The audit event.</param>
         internal static void SetMachineNameToEnvironmentMachineName(AuditEvent auditEvent)
         {
             auditEvent.MachineName = Environment.MachineName;
         }
 
+        /// <summary>
+        /// Sets the name of the application name to logging application.
+        /// </summary>
+        /// <param name="auditEvent">The audit event.</param>
         internal static void SetApplicationNameToLoggingApplicationName(AuditEvent auditEvent)
         {
             auditEvent.ApplicationName = AuditContext.ApplicationName;
         }
 
+        /// <summary>
+        /// Sets the correlation key to flowed correlation key or default.
+        /// </summary>
+        /// <param name="auditEvent">The audit event.</param>
         internal static void SetCorrelationKeyToFlowedCorrelationKeyOrDefault(AuditEvent auditEvent)
         {
             auditEvent.CorrelationKey = AuditContext.CorrelationKey ?? Guid.NewGuid().ToString();
         }
 
+        /// <summary>
+        /// Sets the user data to currently signed in user.
+        /// </summary>
+        /// <param name="auditEvent">The audit event.</param>
         internal static void SetUserDataToCurrentlySignedInUser(AuditEvent auditEvent)
         {
             SetUserDataUsingClaimsPrincipalFactory(auditEvent, () => ClaimsPrincipal.Current ?? Thread.CurrentPrincipal as ClaimsPrincipal);
         }
 
+        /// <summary>
+        /// Sets the user data using claims principal factory.
+        /// </summary>
+        /// <param name="auditEvent">The audit event.</param>
+        /// <param name="principalFactory">The principal factory.</param>
+        /// <exception cref="NotSupportedException"></exception>
         internal static void SetUserDataUsingClaimsPrincipalFactory(AuditEvent auditEvent, Func<ClaimsPrincipal> principalFactory)
         {
             Contract.Requires(auditEvent != null);
@@ -50,7 +75,7 @@
 
             if (currentPrincipal.Identity.IsAuthenticated)
             {
-                var userId = currentPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                var userId = currentPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
                 if (userId == null)
                 {
                     var message = string.Format(
@@ -68,6 +93,11 @@
             }
         }
 
+        /// <summary>
+        /// Sets the user data to flowed user.
+        /// </summary>
+        /// <param name="auditEvent">The audit event.</param>
+        /// <exception cref="InvalidOperationException">No 'UserId' data item found in flowed data.</exception>
         internal static void SetUserDataToFlowedUser(AuditEvent auditEvent)
         {
             Contract.Requires(auditEvent != null);

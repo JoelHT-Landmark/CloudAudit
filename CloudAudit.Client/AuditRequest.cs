@@ -7,10 +7,24 @@
 
     using LiteGuard;
 
+    /// <summary>
+    /// Defines an abstract Audit Request that is used to create the
+    /// <see cref="AuditEvent"/> that goes over the wire.
+    /// </summary>
+    /// <remarks>
+    /// This really is just to support the "fluent API" - preventing a
+    /// developer from using <see cref="AuditEvent"/> instances directly.
+    /// </remarks>
     public class AuditRequest
     {
         private static Func<DateTime> timeProviderFunction = () => DateTime.UtcNow;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuditRequest"/> class.
+        /// </summary>
+        /// <param name="operationType">Type of the operation.</param>
+        /// <param name="targetType">Type of the target.</param>
+        /// <param name="targetId">The target identifier.</param>
         protected AuditRequest(OperationType operationType, Type targetType, string targetId)
         {
             Contract.Requires(targetType != null);
@@ -70,12 +84,28 @@
         /// </summary>
         public dynamic Data { get; protected internal set; }
 
+        /// <summary>
+        /// Gets or sets the time provider.
+        /// </summary>
+        /// <remarks>
+        /// Used for tests only
+        /// </remarks>
+        /// <value>
+        /// The time provider.
+        /// </value>
         protected internal static Func<DateTime> TimeProvider
         {
             get { return timeProviderFunction; }
             set { timeProviderFunction = value; }
         }
 
+        /// <summary>
+        /// Returns an <see cref="AuditRequest"/> representing a view of
+        /// the target object
+        /// </summary>
+        /// <param name="targetType">Type of the target.</param>
+        /// <param name="targetId">The target identifier.</param>
+        /// <returns>The <see cref="AuditRequest"/></returns>
         public static AuditRequest AsViewOf(Type targetType, string targetId)
         {
             Contract.Requires(targetType != null);
@@ -87,6 +117,16 @@
             return new AuditRequest(OperationType.View, targetType, targetId);
         }
 
+        /// <summary>
+        /// Returns an <see cref="AuditRequest" /> representing a view of
+        /// the target object
+        /// </summary>
+        /// <typeparam name="T">The type of the target</typeparam>
+        /// <param name="target">The target.</param>
+        /// <param name="targetIdAccessor">The target identifier accessor.</param>
+        /// <returns>
+        /// The <see cref="AuditRequest" />
+        /// </returns>
         public static AuditRequest AsViewOf<T>(T target, Func<T, string> targetIdAccessor)
             where T : class
         {
@@ -100,6 +140,13 @@
             return request;
         }
 
+        /// <summary>
+        /// Returns an <see cref="AuditRequest"/> representing a change to
+        /// the target object
+        /// </summary>
+        /// <param name="targetType">Type of the target.</param>
+        /// <param name="targetId">The target identifier.</param>
+        /// <returns>The <see cref="AuditRequest"/></returns>
         public static AuditRequest AsChangeTo(Type targetType, string targetId)
         {
             Contract.Requires(targetType != null);
@@ -111,6 +158,16 @@
             return new AuditRequest(OperationType.Change, targetType, targetId);
         }
 
+        /// <summary>
+        /// Returns an <see cref="AuditRequest" /> representing a change to
+        /// the target object
+        /// </summary>
+        /// <typeparam name="T">The type of the target</typeparam>
+        /// <param name="target">The target.</param>
+        /// <param name="targetIdAccessor">The target identifier accessor.</param>
+        /// <returns>
+        /// The <see cref="AuditRequest" />
+        /// </returns>
         public static AuditRequest AsChangeTo<T>(T target, Func<T, string> targetIdAccessor)
             where T : class
         {
@@ -124,6 +181,13 @@
             return request;
         }
 
+        /// <summary>
+        /// Returns an <see cref="AuditRequest"/> representing an action on
+        /// the target object
+        /// </summary>
+        /// <param name="targetType">Type of the target.</param>
+        /// <param name="targetId">The target identifier.</param>
+        /// <returns>The <see cref="AuditRequest"/></returns>
         public static AuditRequest AsActionOn(Type targetType, string targetId)
         {
             Contract.Requires(targetType != null);
@@ -135,6 +199,16 @@
             return new AuditRequest(OperationType.Action, targetType, targetId);
         }
 
+        /// <summary>
+        /// Returns an <see cref="AuditRequest" /> representing an action on
+        /// the target object
+        /// </summary>
+        /// <typeparam name="T">The target type</typeparam>
+        /// <param name="target">The target.</param>
+        /// <param name="targetIdAccessor">The target identifier accessor.</param>
+        /// <returns>
+        /// The <see cref="AuditRequest" />
+        /// </returns>
         public static AuditRequest AsActionOn<T>(T target, Func<T, string> targetIdAccessor)
             where T : class
         {
@@ -148,6 +222,13 @@
             return request;
         }
 
+        /// <summary>
+        /// Returns an <see cref="AuditRequest"/> representing a statement about
+        /// the target object
+        /// </summary>
+        /// <param name="targetType">Type of the target.</param>
+        /// <param name="targetId">The target identifier.</param>
+        /// <returns>The <see cref="AuditRequest"/></returns>
         public static AuditRequest AsStatementAbout(Type targetType, string targetId)
         {
             Contract.Requires(targetType != null);
@@ -159,6 +240,16 @@
             return new AuditRequest(OperationType.Statement, targetType, targetId);
         }
 
+        /// <summary>
+        /// Returns an <see cref="AuditRequest" /> representing a statement about
+        /// the target object
+        /// </summary>
+        /// <typeparam name="T">The type of the target</typeparam>
+        /// <param name="target">The target.</param>
+        /// <param name="targetIdAccessor">The target identifier accessor.</param>
+        /// <returns>
+        /// The <see cref="AuditRequest" />
+        /// </returns>
         public static AuditRequest AsStatementAbout<T>(T target, Func<T, string> targetIdAccessor)
             where T : class
         {

@@ -2,6 +2,9 @@
 {
     using System.Collections.Concurrent;
 
+    /// <summary>
+    /// Defines a static <see cref="AuditContext"/> used for all auditing
+    /// </summary>
     public static class AuditContext
     {
         private static ConcurrentDictionary<string, string> persistentData = new ConcurrentDictionary<string, string>();
