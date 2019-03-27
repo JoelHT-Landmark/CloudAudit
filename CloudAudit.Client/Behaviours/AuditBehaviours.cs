@@ -75,14 +75,14 @@
 
             if (currentPrincipal.Identity.IsAuthenticated)
             {
-                var userId = currentPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                var userId = currentPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                 if (userId == null)
                 {
                     var message = string.Format(
                         CultureInfo.InvariantCulture,
                         "User '{0}' is authenticated, but has no '{1}' claim.",
                         currentPrincipal.Identity.Name,
-                        ClaimTypes.Name);
+                        ClaimTypes.Email);
                     throw new NotSupportedException(message);
                 }
 
